@@ -1,0 +1,25 @@
+{
+  "name": "nobat_online",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "auto-bind": "3.0.0",
+    "dotenv": "16.4.7",
+    "express": "4.21.2",
+    "http-codes": "1.0.0",
+    "http-errors": "2.0.0",
+    "joi": "17.13.3",
+    "mariadb": "3.4.0",
+    "sequelize": "6.37.6",
+    "swagger-jsdoc": "6.2.8",
+    "swagger-ui-express": "5.0.1"
+  }
+}
