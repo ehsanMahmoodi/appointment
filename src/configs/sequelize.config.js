@@ -7,12 +7,12 @@ let sequelize = new Sequelize({
   port: process.env.DB_PORT,
   database: process.env.DB_NAME,
   logging: false,
-
 });
 const initializeDatabase = async () => {
   try {
     await sequelize.authenticate();
     console.log("Database connected.");
+    require("./model.initialize");
     await sequelize.sync({ alter: true });
     console.log("Database synchronized.");
     return true;
