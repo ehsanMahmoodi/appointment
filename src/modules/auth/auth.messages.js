@@ -8,5 +8,6 @@ const AuthMessages = Object.freeze({
     NotFound: "کاربر یافت نشد.",
     OtpNotFound: "رمزیکبارمصرف یافت نشد لطفا مجددا نسبت به دریافت آن اقدام کنید.",
     Login: "باموفقیت وارد شدید",
+    RegisterConflict:"شما قبلا ثبت نام کرده‌اید."
 });
 module.exports = { AuthMessages };

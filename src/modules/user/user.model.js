@@ -29,7 +29,7 @@ const Profile = sequelize.define(
 const Patient = sequelize.define(
   "patient",
   {
-    profileId: { type: DataTypes.INTEGER, allowNull: false },
+    profileId: { type: DataTypes.INTEGER, allowNull: false, unique: true },
   },
   { timestamps: false, freezeTableName: true },
 );
@@ -42,7 +42,7 @@ const Doctor = sequelize.define(
     visitDuration: { type: DataTypes.INTEGER, defaultValue: 15 },
     description: { type: DataTypes.TEXT, defaultValue: null },
     medicalSpecialtyId: { type: DataTypes.INTEGER, defaultValue: null },
-    profileId: { type: DataTypes.INTEGER, allowNull: false },
+    profileId: { type: DataTypes.INTEGER, allowNull: false, unique: true },
   },
   { timestamps: false, freezeTableName: true },
 );
