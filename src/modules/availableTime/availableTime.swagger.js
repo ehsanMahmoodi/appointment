@@ -38,3 +38,19 @@
  *     200:
  *      description: success
  * */
+/**
+ * @swagger
+ *  /doctor/available-time:
+ *   patch:
+ *    summary: edit available time of doctor
+ *    tags:
+ *      -  Doctor
+ *    requestBody:
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: "./#components/schemas/CreateAvailableTime"
+ *    responses:
+ *     200:
+ *      description: success
+ * */

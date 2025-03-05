@@ -2,7 +2,10 @@ const autoBind = require("auto-bind");
 const httpCodes = require("http-codes");
 const { AvailableTimeService } = require("./availableTime.service");
 const { AvailableTimeMessages } = require("./availableTime.messages");
-const { createAvailableTime } = require("./availableTime.validations");
+const {
+  createAvailableTime,
+  editAvailableTime,
+} = require("./availableTime.validations");
 class AvailableTimeController {
   #service;
   constructor() {
@@ -18,6 +21,21 @@ class AvailableTimeController {
         statusCode: res.statusCode,
         data: {
           message: AvailableTimeMessages.Created,
+        },
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+  async editDoctorAvailableDays(req, res, next) {
+    try {
+      const { body } = req;
+      await editAvailableTime.validateAsync(body);
+      await this.#service.editDoctorAvailableDays(body);
+      res.status(httpCodes.OK).json({
+        statusCode: res.statusCode,
+        data: {
+          message: AvailableTimeMessages.Updated,
         },
       });
     } catch (err) {

@@ -30,5 +30,16 @@ class AvailableTimeService {
       throw new createHttpError.NotFound(AvailableTimeMessages.NotFoundDoctor);
     return doctor;
   }
+  async editDoctorAvailableDays(dayDTO) {
+    let { doctorId, day } = dayDTO;
+    await this.checkExistDoctor(doctorId);
+    const where = { doctorId, day };
+    const availableDay = await this.#AvailableTimeModel.findOne({
+      where,
+    });
+    if (!availableDay)
+      throw new createHttpError.BadRequest(AvailableTimeMessages.NotFoundDay);
+    await this.#AvailableTimeModel.update(dayDTO, { where });
+  }
 }
 module.exports = { AvailableTimeService: new AvailableTimeService() };
