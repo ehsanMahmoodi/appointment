@@ -80,5 +80,5 @@ module.exports = {
   sendOtpValidation,
   checkOtpValidation,
   registerDoctorValidation,
-  registerPatientValidation
+  registerPatientValidation,
 };

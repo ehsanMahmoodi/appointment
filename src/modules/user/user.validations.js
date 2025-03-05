@@ -16,7 +16,7 @@ const editProfileValidation = Joi.object({
   }),
   birthDate: Joi.string()
     .optional()
-    .pattern(/^\d{4}-\d{2}-\d{2}$/)
+    .pattern(/^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/)
     .messages({
       "string.pattern.base": "birthDate pattern is wrong",
     }),
