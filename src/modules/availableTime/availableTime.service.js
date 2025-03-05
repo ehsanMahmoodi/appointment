@@ -34,12 +34,23 @@ class AvailableTimeService {
     let { doctorId, day } = dayDTO;
     await this.checkExistDoctor(doctorId);
     const where = { doctorId, day };
+    await this.findDoctorDay(where);
+    await this.#AvailableTimeModel.update(dayDTO, { where });
+  }
+  async removeDoctorAvailableDay(dayDTO) {
+    const { doctorId, day } = dayDTO;
+    await this.checkExistDoctor(doctorId);
+    const where = { doctorId, day };
+    await this.findDoctorDay(where);
+    await this.#AvailableTimeModel.destroy({ where });
+  }
+  async findDoctorDay(condition) {
     const availableDay = await this.#AvailableTimeModel.findOne({
-      where,
+      where: condition,
     });
     if (!availableDay)
       throw new createHttpError.BadRequest(AvailableTimeMessages.NotFoundDay);
-    await this.#AvailableTimeModel.update(dayDTO, { where });
+    return true;
   }
 }
 module.exports = { AvailableTimeService: new AvailableTimeService() };

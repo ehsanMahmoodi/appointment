@@ -42,5 +42,20 @@ class AvailableTimeController {
       next(err);
     }
   }
+  async removeDoctorAvailableDay(req, res, next) {
+    try {
+      const { body } = req;
+      await editAvailableTime.validateAsync(body);
+      await this.#service.removeDoctorAvailableDay(body);
+      res.status(httpCodes.OK).json({
+        statusCode: res.statusCode,
+        data: {
+          message: AvailableTimeMessages.Removed,
+        },
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 module.exports = { AvailableTimeController: new AvailableTimeController() };

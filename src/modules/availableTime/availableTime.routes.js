@@ -9,4 +9,8 @@ router.patch(
   "/available-time",
   AvailableTimeController.editDoctorAvailableDays,
 );
+router.delete(
+  "/available-time",
+  AvailableTimeController.removeDoctorAvailableDay,
+);
 module.exports = { AvailableTimeRouter: router };

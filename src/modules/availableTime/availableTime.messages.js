@@ -4,5 +4,6 @@ const AvailableTimeMessages = Object.freeze({
   NotFoundDay: "روز یافت نشد.",
   NotFoundDoctor: "دکتر یافت نشد.",
   Updated: "بروزرسانی انجام شد.",
+  Removed: "روز حذف شد.",
 });
 module.exports = { AvailableTimeMessages };

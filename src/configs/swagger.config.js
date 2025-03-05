@@ -16,12 +16,9 @@ const swaggerConfig = (app) => {
         },
       ],
       tags: [
-        {
-          name: "Auth",
-        },
-        {
-          name: "User",
-        },
+        {name: "Auth"},
+        {name: "User"},
+        {name: "Doctor"},
       ],
       components: {
         securitySchemes: {
