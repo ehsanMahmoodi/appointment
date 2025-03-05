@@ -15,7 +15,14 @@ const swaggerConfig = (app) => {
           url: "http://localhost:3000",
         },
       ],
-      tags: [],
+      tags: [
+        {
+          name: "Auth",
+        },
+        {
+          name: "User",
+        },
+      ],
       components: {
         securitySchemes: {
           BearerAuth: {

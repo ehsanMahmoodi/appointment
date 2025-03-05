@@ -7,8 +7,8 @@ const sendOtpValidation = Joi.object({
     .messages({
       "any.required": "phone is required",
       "string.base": "phone format must be string",
-      "string.length": "the lenght of phone must be 11 characters ",
-      "string.pattern.base": "phoen number is wrong",
+      "string.length": "the length of phone must be 11 characters ",
+      "string.pattern.base": "phone number is wrong",
     }),
 });
 const checkOtpValidation = Joi.object({
