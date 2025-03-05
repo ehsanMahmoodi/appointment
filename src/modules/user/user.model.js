@@ -46,4 +46,16 @@ const Doctor = sequelize.define(
   },
   { timestamps: false, freezeTableName: true },
 );
-module.exports = { Patient, Profile, Doctor, Otp };
+const RefreshToken = sequelize.define(
+  "refresh_token",
+  {
+    token: { type: DataTypes.TEXT, allowNull: false },
+
+    profileId: { type: DataTypes.INTEGER, allowNull: false },
+  },
+  {
+    freezeTableName: true,
+    updatedAt: false,
+  },
+);
+module.exports = { Patient, Profile, Doctor, Otp, RefreshToken };

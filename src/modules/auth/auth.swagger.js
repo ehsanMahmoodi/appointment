@@ -68,6 +68,13 @@
  *       nationalCode:
  *        type: string
  *        example: 2282222222
+ *    RefreshToken:
+ *     type: object
+ *     required:
+ *        - refreshToken
+ *     properties:
+ *       refreshToken:
+ *        type: string
  */
 /**
  * @swagger
@@ -129,6 +136,22 @@
  *      application/json:
  *       schema:
  *        $ref: "./#/components/schemas/RegisterPatient"
+ *    responses:
+ *     200:
+ *      description: success
+ */
+/**
+ * @swagger
+ *  /auth/refresh-token:
+ *   post:
+ *    summary: create new accessToken and refreshToken
+ *    tags:
+ *      - Auth
+ *    requestBody:
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: "./#/components/schemas/RefreshToken"
  *    responses:
  *     200:
  *      description: success

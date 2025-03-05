@@ -1,20 +1,30 @@
 const autoBind = require("auto-bind");
 const createHttpError = require("http-errors");
-const { Profile, Otp, Doctor, Patient } = require("../user/user.model");
+const {
+  Profile,
+  Otp,
+  Doctor,
+  Patient,
+  RefreshToken,
+} = require("../user/user.model");
 const { randomInt } = require("crypto");
 const { AuthMessages } = require("./auth.messages");
 const { Roles } = require("../../common/constant/role.constant");
+const jwt = require("jsonwebtoken");
+const { verifyJwtToken } = require("../../common/utils/functions");
 class AuthService {
   #ProfileModel;
   #OtpModel;
   #DoctorModel;
   #PatientModel;
+  #RefreshTokenModel;
   constructor() {
     autoBind(this);
     this.#ProfileModel = Profile;
     this.#OtpModel = Otp;
     this.#DoctorModel = Doctor;
     this.#PatientModel = Patient;
+    this.#RefreshTokenModel = RefreshToken;
   }
   async sendOtp(phone) {
     let profile = await this.findProfileByPhone({ phone, isThrowError: false });
@@ -48,13 +58,15 @@ class AuthService {
     });
     if (!getProfileOtp)
       throw new createHttpError.NotFound(AuthMessages.OtpNotFound);
-    if (getProfileOtp.expiresIn < now)
-      throw new createHttpError.BadRequest(AuthMessages.OtpExpired);
     if (getProfileOtp.code !== code)
       throw new createHttpError.BadRequest(AuthMessages.OtpNotMatch);
+    if (getProfileOtp.expiresIn < now)
+      throw new createHttpError.BadRequest(AuthMessages.OtpExpired);
     profile.verifyPhone = true;
     await profile.save();
-    return true;
+    const access_token = this.signAccessToken({ id: profile.id, phone });
+    const refresh_token = this.signRefreshToken({ id: profile.id, phone });
+    return { access_token, refresh_token };
   }
   async findProfileByPhone({ phone, isThrowError }) {
     const profile = await this.#ProfileModel.findOne({ where: { phone } });
@@ -116,6 +128,44 @@ class AuthService {
     if (patient || doctor)
       throw new createHttpError.Conflict(AuthMessages.RegisterConflict);
     return true;
+  }
+  signAccessToken(payload) {
+    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET_KEY, {
+      expiresIn: "10d",
+      algorithm: "HS256",
+    });
+  }
+  signRefreshToken(payload) {
+    return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET_KEY, {
+      expiresIn: "1y",
+      algorithm: "HS256",
+    });
+  }
+  async refreshToken(token) {
+    const { id } = verifyJwtToken(token, process.env.REFRESH_TOKEN_SECRET_KEY);
+    const profile = await this.#ProfileModel.findByPk(id);
+    const blackListToken = await this.#RefreshTokenModel.findOne({
+      where:{
+        profileId: profile.id,
+        token,
+      }
+    })
+    if(blackListToken)
+      throw new createHttpError.BadRequest(AuthMessages.RefreshTokenExpired)
+    if (!profile) throw new createHttpError.NotFound(AuthMessages.NotFound);
+    const access_token = this.signAccessToken({
+      id: profile.id,
+      phone: profile.phone,
+    });
+    const refresh_token = this.signRefreshToken({
+      id: profile.id,
+      phone: profile.phone,
+    });
+    await this.#RefreshTokenModel.create({
+      profileId: profile.id,
+      token,
+    });
+    return { access_token, refresh_token };
   }
 }
 module.exports = { AuthService: new AuthService() };

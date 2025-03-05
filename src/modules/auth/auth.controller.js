@@ -1,7 +1,12 @@
 const autoBind = require("auto-bind");
 const httpCodes = require("http-codes");
 const { AuthService } = require("./auth.service");
-const { sendOtpValidation, checkOtpValidation, registerDoctorValidation, registerPatientValidation} = require("./auth.validations");
+const {
+  sendOtpValidation,
+  checkOtpValidation,
+  registerDoctorValidation,
+  registerPatientValidation,
+} = require("./auth.validations");
 const { AuthMessages } = require("./auth.messages");
 class AuthController {
   #service;
@@ -33,11 +38,16 @@ class AuthController {
         body: { phone, code },
       } = req;
       await checkOtpValidation.validateAsync({ phone, code });
-      await this.#service.checkOtp({ phone, code });
+      const { access_token, refresh_token } = await this.#service.checkOtp({
+        phone,
+        code,
+      });
       res.status(httpCodes.OK).json({
         statusCode: res.statusCode,
         data: {
           message: AuthMessages.Login,
+          access_token,
+          refresh_token,
         },
       });
     } catch (error) {
@@ -47,7 +57,7 @@ class AuthController {
   async registerDoctor(req, res, next) {
     try {
       const { body } = req;
-      await registerDoctorValidation.validateAsync(body)
+      await registerDoctorValidation.validateAsync(body);
       await this.#service.registerDoctor(body);
       res.status(httpCodes.OK).json({
         statusCode: res.statusCode,
@@ -62,12 +72,31 @@ class AuthController {
   async registerPatient(req, res, next) {
     try {
       const { body } = req;
-      await registerPatientValidation.validateAsync(body)
+      await registerPatientValidation.validateAsync(body);
       await this.#service.registerPatient(body);
       res.status(httpCodes.OK).json({
         statusCode: res.statusCode,
         data: {
           message: AuthMessages.Login,
+        },
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+  async refreshToken(req, res, next) {
+    try {
+      const {
+        body: { refreshToken },
+      } = req;
+      const { access_token, refresh_token } =
+        await this.#service.refreshToken(refreshToken);
+      res.status(httpCodes.OK).json({
+        statusCode: res.statusCode,
+        data: {
+          message: AuthMessages.Login,
+          access_token,
+          refresh_token,
         },
       });
     } catch (err) {
