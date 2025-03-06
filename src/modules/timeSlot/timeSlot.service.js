@@ -5,9 +5,9 @@ const {
   AvailableTimeMessages,
 } = require("../availableTime/availableTime.messages");
 const {
-  isValidTime,
   isTimeAfter,
   canAddTimeSlot,
+  updateTimeSlot,
 } = require("../../common/utils/functions");
 const { TimeSlot } = require("./timeSlot.model");
 const { TimeSlotMessages } = require("./timeSlot.messages");
@@ -22,9 +22,7 @@ class TimeSlotService {
   async createTimeSlot(timeDTO) {
     const { dayId, start, end } = timeDTO;
     await this.findDay(dayId);
-    isValidTime(start);
     if (end) {
-      isValidTime(end);
       let timeStatus = isTimeAfter(end, start);
       if (!timeStatus)
         throw new createHttpError.BadRequest(TimeSlotMessages.AfterTimeError);
@@ -60,8 +58,27 @@ class TimeSlotService {
         start,
         ...(end && { end }),
       };
+      console.log(JSON.stringify(timeSlots));
       return canAddTimeSlot(timeSlots, newSlot);
     }
+  }
+  async editTimeSlot(timeDTO) {
+    const { id, start, end } = timeDTO;
+    const time = await this.findTimeSlot(id);
+    if (start) {
+      await this.checkExistStartTime({ dayId: time?.dayId, start });
+    }
+    let times = await this.#TimeModel.findAll({ where: { dayId: time.dayId } });
+    updateTimeSlot(times, time.dayId, time.start, start, end);
+    await this.#TimeModel.update(timeDTO, {
+      fields: ["dayId", "start", "end"],
+      where: { id },
+    });
+  }
+  async findTimeSlot(id) {
+    const time = await this.#TimeModel.findByPk(id);
+    if (!time) throw new createHttpError.NotFound(TimeSlotMessages.NotFound);
+    return time;
   }
 }
 module.exports = { TimeSlotService: new TimeSlotService() };

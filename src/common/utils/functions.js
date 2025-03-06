@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const createHttpError = require("http-errors");
 const { AuthorizationMessages } = require("../guard/authorization.messages");
 const { PublicMessages } = require("./public.messages");
-const { parse, isAfter } = require("date-fns");
+const { parse, isAfter, isBefore, format } = require("date-fns");
 const verifyJwtToken = (token, secretKey) => {
   let data;
   jwt.verify(token, secretKey, function (err, decode) {
@@ -20,15 +20,9 @@ const verifyJwtToken = (token, secretKey) => {
   return data;
 };
 const isValidTime = (time = "") => {
-  let [hour, min] = time.split(":");
-  if (hour && min) {
-    if (hour == "24" || hour == "0" || hour == "00" || +hour > 23 || +hour < 1)
-      throw new createHttpError.BadRequest(PublicMessages.InvalidTime);
-    if (min == "24" || +min > 59 || +min < 0)
-      throw new createHttpError.BadRequest(PublicMessages.InvalidTime);
-    return true;
-  }
-  throw new createHttpError.BadRequest(PublicMessages.InvalidTime);
+  if (typeof time !== "string") return false;
+  const parsedTime = parse(time, "HH:mm", new Date());
+  return format(parsedTime, "HH:mm") === time;
 };
 const isTimeAfter = (time1, time2) => {
   const t1 = parse(time1, "HH:mm", new Date());
@@ -65,4 +59,52 @@ const canAddTimeSlot = (slots, newSlot) => {
   }
   return true;
 };
-module.exports = { verifyJwtToken, isValidTime, isTimeAfter, canAddTimeSlot };
+const isTimeBetween = (target, start, end) => {
+  const t = parse(target, "HH:mm", new Date());
+  const s = parse(start, "HH:mm", new Date());
+  const e = parse(end, "HH:mm", new Date());
+  return isAfter(t, s) && isBefore(t, e);
+};
+const updateTimeSlot = (
+  schedule,
+  dayId,
+  currentStart,
+  newStart = null,
+  newEnd = null,
+) => {
+  let slot = schedule.find(
+    (slot) => slot.dayId === dayId && slot.start === currentStart,
+  );
+  if (!slot) throw new Error("Time slot not found");
+  let sameDaySlots = schedule.filter((s) => s.dayId === dayId && s !== slot);
+  if (newStart) {
+    if (!isValidTime(newStart)) throw new Error("Invalid start format");
+    if (sameDaySlots.some((s) => isTimeBetween(newStart, s.start, s.end))) {
+      throw new Error(`Start time ${newStart} overlaps with another slot`);
+    }
+    slot.start = newStart;
+  }
+  if (newEnd) {
+    if (!isValidTime(newEnd)) throw new Error("Invalid end format");
+    if (
+      !isAfter(
+        parse(newEnd, "HH:mm", new Date()),
+        parse(slot.start, "HH:mm", new Date()),
+      )
+    ) {
+      throw new Error("End time must be after start time");
+    }
+    if (sameDaySlots.some((s) => isTimeBetween(newEnd, s.start, s.end))) {
+      throw new Error(`End time ${newEnd} overlaps with another slot`);
+    }
+    slot.end = newEnd;
+  }
+  return schedule;
+};
+module.exports = {
+  verifyJwtToken,
+  isValidTime,
+  isTimeAfter,
+  canAddTimeSlot,
+  updateTimeSlot,
+};
