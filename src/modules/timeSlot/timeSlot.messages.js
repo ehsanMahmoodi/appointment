@@ -4,5 +4,6 @@ const TimeSlotMessages = Object.freeze({
   Conflict: "ساعت شروع تکراری می باشد",
   NotFound: "ساعت ویزیت یافت نشد.",
   Updated: "ساعت ویزیت بروزرسانی شد",
+  Removed: "ساعت ویزیت حذف شد",
 });
 module.exports = { TimeSlotMessages };

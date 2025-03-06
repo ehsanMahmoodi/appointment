@@ -3,4 +3,5 @@ const { TimeSlotController } = require("./timeSlot.controller");
 const router = Router();
 router.post("/time-slot", TimeSlotController.createTimeSlot);
 router.patch("/time-slot", TimeSlotController.editTimeSlot);
+router.delete("/time-slot", TimeSlotController.removeTimeSlot);
 module.exports = { TimeSlotRouter: router };

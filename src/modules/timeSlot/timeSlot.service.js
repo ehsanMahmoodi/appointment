@@ -80,5 +80,9 @@ class TimeSlotService {
     if (!time) throw new createHttpError.NotFound(TimeSlotMessages.NotFound);
     return time;
   }
+  async removeTimeSlot(id) {
+    await this.findTimeSlot(id);
+    await this.#TimeModel.destroy({ where: { id } });
+  }
 }
 module.exports = { TimeSlotService: new TimeSlotService() };

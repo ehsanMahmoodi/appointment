@@ -2,7 +2,11 @@ const autoBind = require("auto-bind");
 const httpCodes = require("http-codes");
 const { TimeSlotService } = require("./timeSlot.service");
 const { TimeSlotMessages } = require("./timeSlot.messages");
-const { createTimeSlotValidation, editTimeSlotValidation} = require("./timeSlot.validations");
+const {
+  createTimeSlotValidation,
+  editTimeSlotValidation,
+  removeTimeSlotValidation,
+} = require("./timeSlot.validations");
 class TimeSlotController {
   #service;
   constructor() {
@@ -33,6 +37,23 @@ class TimeSlotController {
         statusCode: res.statusCode,
         data: {
           message: TimeSlotMessages.Updated,
+        },
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+  async removeTimeSlot(req, res, next) {
+    try {
+      const {
+        body: { id },
+      } = req;
+      await removeTimeSlotValidation.validateAsync({ id });
+      await this.#service.removeTimeSlot(id);
+      res.status(httpCodes.OK).json({
+        statusCode: res.statusCode,
+        data: {
+          message: TimeSlotMessages.Removed,
         },
       });
     } catch (err) {

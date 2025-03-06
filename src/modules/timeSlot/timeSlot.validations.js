@@ -36,4 +36,14 @@ const editTimeSlotValidation = Joi.object({
       "string.pattern.base": "end time pattern is wrong",
     }),
 }).unknown(true);
-module.exports = { createTimeSlotValidation,editTimeSlotValidation };
+const removeTimeSlotValidation = Joi.object({
+  id: Joi.number().required().messages({
+    "number.base": "time-slot id format must be number",
+    "any.required": "time-slot id is required",
+  }),
+}).unknown(true);
+module.exports = {
+  createTimeSlotValidation,
+  editTimeSlotValidation,
+  removeTimeSlotValidation,
+};
