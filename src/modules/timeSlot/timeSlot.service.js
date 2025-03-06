@@ -84,5 +84,8 @@ class TimeSlotService {
     await this.findTimeSlot(id);
     await this.#TimeModel.destroy({ where: { id } });
   }
+  async getTimeSlots(dayId) {
+    return await this.#TimeModel.findAll({ where: { dayId } });
+  }
 }
 module.exports = { TimeSlotService: new TimeSlotService() };

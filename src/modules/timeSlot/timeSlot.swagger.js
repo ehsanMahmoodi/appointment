@@ -43,6 +43,22 @@
 
 /**
  * @swagger
+ *  /doctor/time-slot/{dayId}:
+ *   get:
+ *    summary: get doctor free times
+ *    tags:
+ *      -  Doctor
+ *    parameters:
+ *       -  in: path
+ *          name: dayId
+ *          type: number
+ *          required: true
+ *    responses:
+ *     200:
+ *      description: success
+ * */
+/**
+ * @swagger
  *  /doctor/time-slot:
  *   post:
  *    summary: create time slot for available day of doctor

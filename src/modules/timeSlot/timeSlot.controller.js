@@ -60,5 +60,21 @@ class TimeSlotController {
       next(err);
     }
   }
+  async getTimeSlots(req, res, next) {
+    try {
+      const {
+        params: { dayId },
+      } = req;
+      const times = await this.#service.getTimeSlots(dayId);
+      res.status(httpCodes.OK).json({
+        statusCode: res.statusCode,
+        data: {
+          times,
+        },
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 module.exports = { TimeSlotController: new TimeSlotController() };
