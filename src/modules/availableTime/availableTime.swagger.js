@@ -36,6 +36,22 @@
 
 /**
  * @swagger
+ *  /doctor/available-time/{doctorId}:
+ *   get:
+ *    summary: get doctor available times
+ *    tags:
+ *      -  Doctor
+ *    parameters:
+ *      - in: path
+ *        type: number
+ *        name: doctorId
+ *        required: true
+ *    responses:
+ *     200:
+ *      description: success
+ * */
+/**
+ * @swagger
  *  /doctor/available-time:
  *   post:
  *    summary: create available time to doctor

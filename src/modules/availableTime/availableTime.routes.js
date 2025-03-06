@@ -13,4 +13,8 @@ router.delete(
   "/available-time",
   AvailableTimeController.removeDoctorAvailableDay,
 );
+router.get(
+  "/available-time/:doctorId",
+  AvailableTimeController.getDoctorAvailableDays,
+);
 module.exports = { AvailableTimeRouter: router };

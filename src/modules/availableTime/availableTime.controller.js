@@ -57,5 +57,21 @@ class AvailableTimeController {
       next(err);
     }
   }
+  async getDoctorAvailableDays(req, res, next) {
+    try {
+      const {
+        params: { doctorId },
+      } = req;
+      const days = await this.#service.getDoctorAvailableDays(doctorId);
+      res.status(httpCodes.OK).json({
+        statusCode: res.statusCode,
+        data: {
+          days,
+        },
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 module.exports = { AvailableTimeController: new AvailableTimeController() };
