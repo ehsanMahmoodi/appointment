@@ -1,6 +1,7 @@
 const { Profile, Otp, Doctor, Patient,RefreshToken} = require("../modules/user/user.model");
 const {AvailableTime} = require("../modules/availableTime/availableTime.model");
 const {TimeSlot} = require("../modules/timeSlot/timeSlot.model");
+const {Appointment} = require("../modules/appointment/appointment.model");
 
 // user relations
 Profile.hasOne(Otp, {foreignKey: "profileId",as: "otp",onDelete: "CASCADE"});
@@ -16,3 +17,8 @@ Doctor.hasMany(AvailableTime,{foreignKey:"doctorId",as:'days'})
 AvailableTime.belongsTo(Doctor,{foreignKey:"doctorId",as:"doctor"})
 AvailableTime.hasMany(TimeSlot,{foreignKey:"dayId",as:'times'})
 TimeSlot.belongsTo(AvailableTime,{foreignKey:"dayId",as:"day"})
+// appointment
+Doctor.hasMany(Appointment,{foreignKey:"doctorId",as:"appointment"})
+Appointment.belongsTo(Doctor,{foreignKey:"doctorId",as:"doctor"})
+Patient.hasMany(Appointment,{foreignKey:"doctorId",as:"appointment"})
+Appointment.belongsTo(Patient,{foreignKey:"doctorId",as:"patient"})

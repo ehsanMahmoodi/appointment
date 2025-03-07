@@ -19,6 +19,7 @@ const swaggerConfig = (app) => {
         {name: "Auth"},
         {name: "User"},
         {name: "Doctor"},
+        {name: "Appointment"},
       ],
       components: {
         securitySchemes: {

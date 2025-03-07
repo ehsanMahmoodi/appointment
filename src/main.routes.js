@@ -6,11 +6,13 @@ const {
   AvailableTimeRouter,
 } = require("./modules/availableTime/availableTime.routes");
 const { TimeSlotRouter } = require("./modules/timeSlot/timeSlot.routes");
+const {AppointmentRouter} = require("./modules/appointment/appointment.routes");
 const router = Router();
 router.use("/auth", AuthRouter);
 router.use("/user", Authorization, UserRouter);
 router.use("/doctor", Authorization, AvailableTimeRouter);
 router.use("/doctor", Authorization, TimeSlotRouter);
+router.use("/appointment", Authorization, AppointmentRouter);
 module.exports = {
   MainRouter: router,
 };
