@@ -11,6 +11,7 @@ const { AvailableTime } = require("../availableTime/availableTime.model");
 const {
   AppointmentStatus,
 } = require("../../common/constant/appointment.constant");
+const { Doctor, Profile, Patient } = require("../user/user.model");
 class AppointmentService {
   #AppointmentModel;
   #TimeModel;
@@ -47,7 +48,6 @@ class AppointmentService {
   async checkExistAvailableDoctorOfDay({ doctorId, timeId }) {
     const time = await this.checkTimeBooking(timeId);
     const dayId = time.dayId;
-    console.log(time.dataValues);
     const availableDay = await this.#AvailableTimeModel.findOne({
       where: { doctorId, id: dayId },
     });
@@ -89,6 +89,66 @@ class AppointmentService {
     if (isThrowError && !appointment)
       throw new createHttpError.NotFound(AppointmentMessages.NotFound);
     return appointment;
+  }
+  async getPatientAppointments(patientId) {
+    const appointments = await this.#AppointmentModel.findAll({
+      where: { patientId },
+      include: [
+        {
+          model: Doctor,
+          as: "doctor",
+          include: [{ model: Profile, as: "profile" }],
+        },
+        {
+          model: TimeSlot,
+          as: "time",
+          include: [{ model: AvailableTime, as: "day" }],
+        },
+      ],
+    });
+    let result = [];
+    for (const item of appointments) {
+      let doctorName = `${item.doctor.profile.firstName} ${item.doctor.profile.lastName ?? ""}`;
+      let detail = {
+        id: item.id,
+        status: item.status,
+        doctor: doctorName,
+        time: item.time.start,
+        day: item.time.day.day,
+      };
+      result.push(detail);
+    }
+    return result;
+  }
+  async getDoctorAppointments(doctorId) {
+    const appointments = await this.#AppointmentModel.findAll({
+      where: { doctorId },
+      include: [
+        {
+          model: Patient,
+          as: "patient",
+          include: [{ model: Profile, as: "patient" }],
+        },
+        {
+          model: TimeSlot,
+          as: "time",
+          include: [{ model: AvailableTime, as: "day" }],
+        },
+      ],
+    });
+    let result = [];
+    for (const item of appointments) {
+      let patientName = `${item.patient.patient.firstName} ${item.patient.patient.lastName ?? ""}`;
+      let detail = {
+        id: item.id,
+        status: item.status,
+        patient: patientName,
+        time: item.time.start,
+        day: item.time.day.day,
+      };
+      result.push(detail);
+    }
+    return result;
   }
 }
 module.exports = { AppointmentService: new AppointmentService() };

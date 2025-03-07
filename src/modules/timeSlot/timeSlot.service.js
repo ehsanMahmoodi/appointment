@@ -58,7 +58,6 @@ class TimeSlotService {
         start,
         ...(end && { end }),
       };
-      console.log(JSON.stringify(timeSlots));
       return canAddTimeSlot(timeSlots, newSlot);
     }
   }

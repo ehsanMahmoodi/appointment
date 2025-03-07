@@ -6,10 +6,10 @@ const {Appointment} = require("../modules/appointment/appointment.model");
 // user relations
 Profile.hasOne(Otp, {foreignKey: "profileId",as: "otp",onDelete: "CASCADE"});
 Otp.belongsTo(Profile, { foreignKey: "profileId", as: "profile"});
-Profile.hasOne(Doctor,{foreignKey:"profileId",as:"doctor",onDelete:"CASCADE"})
+Profile.hasOne(Doctor,{foreignKey:"profileId",as:"profile",onDelete:"CASCADE"})
 Doctor.belongsTo(Profile,{foreignKey:"profileId",as:"profile"})
 Profile.hasOne(Patient,{foreignKey:"profileId",as:"patient",onDelete:"CASCADE"})
-Patient.belongsTo(Profile,{foreignKey:"profileId",as:"profile"})
+Patient.belongsTo(Profile,{foreignKey:"profileId",as:"patient"})
 Profile.hasOne(RefreshToken,{foreignKey:"profileId",as:"refreshToken",onDelete:"CASCADE"})
 RefreshToken.belongsTo(Profile,{foreignKey:"profileId",as:"profile"})
 // doctor relations
@@ -20,5 +20,7 @@ TimeSlot.belongsTo(AvailableTime,{foreignKey:"dayId",as:"day"})
 // appointment
 Doctor.hasMany(Appointment,{foreignKey:"doctorId",as:"appointment"})
 Appointment.belongsTo(Doctor,{foreignKey:"doctorId",as:"doctor"})
-Patient.hasMany(Appointment,{foreignKey:"doctorId",as:"appointment"})
-Appointment.belongsTo(Patient,{foreignKey:"doctorId",as:"patient"})
+Patient.hasMany(Appointment,{foreignKey:"patientId",as:"appointment"})
+Appointment.belongsTo(Patient,{foreignKey:"patientId",as:"patient"})
+TimeSlot.hasOne(Appointment,{foreignKey:"timeId",as:"time"})
+Appointment.belongsTo(TimeSlot,{foreignKey:"timeId",as:"time"})

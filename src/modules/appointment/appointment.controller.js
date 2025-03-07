@@ -42,5 +42,34 @@ class AppointmentController {
       next(err);
     }
   }
+  async getPatientAppointments(req, res, next) {
+    try {
+      const {
+        params: { patientId },
+      } = req;
+      const appointments =
+        await this.#service.getPatientAppointments(patientId);
+      res.status(httpCodes.OK).json({
+        statusCode: res.statusCode,
+        data: { appointments },
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+  async getDoctorAppointments(req, res, next) {
+    try {
+      const {
+        params: { doctorId },
+      } = req;
+      const appointments = await this.#service.getDoctorAppointments(doctorId);
+      res.status(httpCodes.OK).json({
+        statusCode: res.statusCode,
+        data: { appointments },
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 module.exports = { AppointmentController: new AppointmentController() };

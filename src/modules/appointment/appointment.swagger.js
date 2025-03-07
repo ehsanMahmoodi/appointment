@@ -62,3 +62,35 @@
  *     200:
  *      description: success
  * */
+/**
+ * @swagger
+ *  /appointment/user/reservations/{patientId}:
+ *   get:
+ *    summary: get user appointments
+ *    tags:
+ *      - Appointment
+ *    parameters:
+ *       -  in: path
+ *          name: patientId
+ *          type: number
+ *          required: true
+ *    responses:
+ *     200:
+ *      description: success
+ * */
+/**
+ * @swagger
+ *  /appointment/doctor/reservations/{doctorId}:
+ *   get:
+ *    summary: get user appointments
+ *    tags:
+ *      - Appointment
+ *    parameters:
+ *       -  in: path
+ *          name: doctorId
+ *          type: number
+ *          required: true
+ *    responses:
+ *     200:
+ *      description: success
+ * */
