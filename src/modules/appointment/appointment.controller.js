@@ -25,5 +25,22 @@ class AppointmentController {
       next(err);
     }
   }
+  async update(req, res, next) {
+    try {
+      const {
+        body: { timeId, status },
+        params: { appointmentId },
+      } = req;
+      await this.#service.update({ timeId, status, appointmentId });
+      res.status(httpCodes.OK).json({
+        statusCode: res.statusCode,
+        data: {
+          message: AppointmentMessages.Updated,
+        },
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
 module.exports = { AppointmentController: new AppointmentController() };

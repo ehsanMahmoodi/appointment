@@ -8,6 +8,9 @@ const {
   AvailableTimeService,
 } = require("../availableTime/availableTime.service");
 const { AvailableTime } = require("../availableTime/availableTime.model");
+const {
+  AppointmentStatus,
+} = require("../../common/constant/appointment.constant");
 class AppointmentService {
   #AppointmentModel;
   #TimeModel;
@@ -51,6 +54,41 @@ class AppointmentService {
     if (!availableDay)
       throw new createHttpError.BadRequest(TimeSlotMessages.NotFound);
     return true;
+  }
+  async update(appointmentDTO) {
+    const { timeId, status, appointmentId } = appointmentDTO;
+    const appointment = await this.findAppointment({
+      id: appointmentId,
+      isThrowError: true,
+    });
+    let doctorId = appointment.doctorId;
+    if (!Object.values(AppointmentStatus).includes(status))
+      throw new createHttpError.BadRequest(AppointmentMessages.InValidStatus);
+    let newTime = null;
+    let oldTime = appointment.timeId;
+    if (timeId && timeId !== oldTime) {
+      await this.checkExistAvailableDoctorOfDay({ doctorId, timeId });
+      newTime = await this.checkTimeBooking(timeId);
+    }
+    await this.#AppointmentModel.update(
+      { status, timeId },
+      { where: { id: appointmentId } },
+    );
+    if (newTime) {
+      newTime.isBooking = true;
+      await newTime.save();
+      await this.#TimeModel.update(
+        { isBooking: false },
+        { where: { id: oldTime } },
+      );
+    }
+    return true;
+  }
+  async findAppointment({ id, isThrowError }) {
+    const appointment = await this.#AppointmentModel.findOne({ where: { id } });
+    if (isThrowError && !appointment)
+      throw new createHttpError.NotFound(AppointmentMessages.NotFound);
+    return appointment;
   }
 }
 module.exports = { AppointmentService: new AppointmentService() };

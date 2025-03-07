@@ -14,6 +14,15 @@
  *      timeId:
  *       type: number
  *       example: 1
+ *    UpdateAppointment:
+ *     type: object
+ *     properties:
+ *      status:
+ *       type: string
+ *       example: cancel
+ *      timeId:
+ *       type: number
+ *       example: 1
  * */
 
 /**
@@ -28,6 +37,27 @@
  *      application/json:
  *       schema:
  *        $ref: "./#/components/schemas/CreateAppointment"
+ *    responses:
+ *     200:
+ *      description: success
+ * */
+/**
+ * @swagger
+ *  /appointment/update/{appointmentId}:
+ *   patch:
+ *    summary: update appointment
+ *    tags:
+ *      - Appointment
+ *    parameters:
+ *       -  in: path
+ *          name: appointmentId
+ *          type: number
+ *          required: true
+ *    requestBody:
+ *     content:
+ *      application/json:
+ *       schema:
+ *        $ref: "./#/components/schemas/UpdateAppointment"
  *    responses:
  *     200:
  *      description: success
