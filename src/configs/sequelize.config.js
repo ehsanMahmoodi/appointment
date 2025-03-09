@@ -5,7 +5,7 @@ let sequelize = new Sequelize({
   dialect: process.env.DB_TYPE,
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
-  database: process.env.DB_NAME+"_dev",
+  database: process.env.DB_NAME,
   logging: false,
 });
 const initializeDatabase = async () => {
