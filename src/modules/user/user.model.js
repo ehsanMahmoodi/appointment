@@ -24,14 +24,14 @@ const Profile = sequelize.define(
     isActive: { type: DataTypes.BOOLEAN, defaultValue: false },
     role: { type: DataTypes.ENUM(...Object.values(Roles)), defaultValue: null },
   },
-  { createdAt: false, freezeTableName: true },
+  { createdAt: false, freezeTableName: true }
 );
 const Patient = sequelize.define(
   "patient",
   {
     profileId: { type: DataTypes.INTEGER, allowNull: false, unique: true },
   },
-  { timestamps: false, freezeTableName: true },
+  { timestamps: false, freezeTableName: true }
 );
 const Doctor = sequelize.define(
   "doctor",
@@ -44,18 +44,17 @@ const Doctor = sequelize.define(
     medicalSpecialtyId: { type: DataTypes.INTEGER, defaultValue: null },
     profileId: { type: DataTypes.INTEGER, allowNull: false, unique: true },
   },
-  { timestamps: false, freezeTableName: true },
+  { timestamps: false, freezeTableName: true }
 );
 const RefreshToken = sequelize.define(
   "refresh_token",
   {
     token: { type: DataTypes.TEXT, allowNull: false },
-
     profileId: { type: DataTypes.INTEGER, allowNull: false },
   },
   {
     freezeTableName: true,
     updatedAt: false,
-  },
+  }
 );
 module.exports = { Patient, Profile, Doctor, Otp, RefreshToken };

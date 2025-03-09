@@ -5,7 +5,7 @@ let sequelize = new Sequelize({
   dialect: process.env.DB_TYPE,
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
+  database: process.env.DB_NAME+"_dev",
   logging: false,
 });
 const initializeDatabase = async () => {
@@ -13,8 +13,9 @@ const initializeDatabase = async () => {
     await sequelize.authenticate();
     console.log("Database connected.");
     require("./model.initialize");
-    await sequelize.sync({ alter: true });
-    console.log("Database synchronized.");
+    // await sequelize.sync({ alter: true });
+    // console.log("Database synchronized.");
+    console.log("Migration should be run manually using sequelize-cli.");
     return true;
   } catch (error) {
     console.error("Database connection error:", error);
