@@ -26,5 +26,5 @@ Appointment.belongsTo(Patient,{foreignKey:"patientId",as:"patient"})
 TimeSlot.hasOne(Appointment,{foreignKey:"timeId",as:"time"})
 Appointment.belongsTo(TimeSlot,{foreignKey:"timeId",as:"time"})
 // medical-system
-MedicalSystem.hasOne(MedicalSystem,{foreignKey:"parentId"})
-MedicalSystem.belongsTo(MedicalSystem,{foreignKey:"parentId"})
+MedicalSystem.hasMany(MedicalSystem,{foreignKey:"parentId", as: "children"})
+MedicalSystem.belongsTo(MedicalSystem,{foreignKey:"parentId", as: "parent"})

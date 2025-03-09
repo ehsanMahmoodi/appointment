@@ -33,5 +33,11 @@ class MedicalSystemService {
   async findMedicalSystemById(id) {
     return await this.#model.findOne({ where: { id } });
   }
+  async getAll() {
+    return await this.#model.findAll({
+      where: { parentId: null },
+      include: [{ model: this.#model, as: "children" }],
+    });
+  }
 }
 module.exports = { MedicalSystemService: new MedicalSystemService() };

@@ -31,3 +31,14 @@
  *     200:
  *      description: success
  * */
+/**
+ * @swagger
+ *  /medical-system:
+ *   get:
+ *    summary: get all medical systems
+ *    tags:
+ *      - Medical-System
+ *    responses:
+ *     200:
+ *      description: success
+ * */
