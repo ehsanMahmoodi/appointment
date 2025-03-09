@@ -1,3 +1,5 @@
+require('../../configs/env.loader')
+console.log(process.env.DB_TYPE)
 const createHttpError = require("http-errors");
 const { AuthorizationMessages } = require("./authorization.messages");
 const { verifyJwtToken } = require("../utils/functions");

@@ -4,7 +4,12 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "migrate:dev": "cross-env NODE_ENV=development npx sequelize-cli db:migrate",
+    "migrate:prod": "cross-env NODE_ENV=production npx sequelize-cli db:migrate",
+    "rollback:dev": "cross-env NODE_ENV=development npx sequelize-cli db:migrate:undo:all",
+    "rollback:prod": "cross-env NODE_ENV=production npx sequelize-cli db:migrate:undo:all",
+    "seed:all":"npx sequelize-cli db:seed:all"
   },
   "keywords": [],
   "author": "",

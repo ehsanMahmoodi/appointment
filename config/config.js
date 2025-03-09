@@ -1,3 +1,4 @@
+require('../src/configs/env.loader')
 module.exports = {
   development: {
     username: process.env.DB_USERNAME,

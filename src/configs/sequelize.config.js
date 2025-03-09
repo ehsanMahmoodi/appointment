@@ -1,3 +1,4 @@
+require('./env.loader')
 const { Sequelize } = require("sequelize");
 let sequelize = new Sequelize({
   username: process.env.DB_USERNAME,
