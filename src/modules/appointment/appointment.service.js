@@ -97,7 +97,7 @@ class AppointmentService {
         {
           model: Doctor,
           as: "doctor",
-          include: [{ model: Profile, as: "profile" }],
+          include: [{ model: Profile, as: "doctor" }],
         },
         {
           model: TimeSlot,
@@ -108,7 +108,7 @@ class AppointmentService {
     });
     let result = [];
     for (const item of appointments) {
-      let doctorName = `${item.doctor.profile.firstName} ${item.doctor.profile.lastName ?? ""}`;
+      let doctorName = `${item.doctor.doctor.firstName} ${item.doctor.doctor.lastName ?? ""}`;
       let detail = {
         id: item.id,
         status: item.status,
