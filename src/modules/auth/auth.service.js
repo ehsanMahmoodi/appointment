@@ -1,4 +1,4 @@
-require('../../configs/env.loader')
+require("../../configs/env.loader");
 const autoBind = require("auto-bind");
 const createHttpError = require("http-errors");
 const {
@@ -146,13 +146,13 @@ class AuthService {
     const { id } = verifyJwtToken(token, process.env.REFRESH_TOKEN_SECRET_KEY);
     const profile = await this.#ProfileModel.findByPk(id);
     const blackListToken = await this.#RefreshTokenModel.findOne({
-      where:{
+      where: {
         profileId: profile.id,
         token,
-      }
-    })
-    if(blackListToken)
-      throw new createHttpError.BadRequest(AuthMessages.RefreshTokenExpired)
+      },
+    });
+    if (blackListToken)
+      throw new createHttpError.BadRequest(AuthMessages.RefreshTokenExpired);
     if (!profile) throw new createHttpError.NotFound(AuthMessages.NotFound);
     const access_token = this.signAccessToken({
       id: profile.id,

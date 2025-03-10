@@ -12,7 +12,7 @@ class UserService {
     this.#PatientModel = Patient;
   }
   async editProfile(userDTO) {
-    const { birthDate, firstName, lastname, isActive } = userDTO;
+    const { birthDate, firstName, lastName, isActive } = userDTO;
     const profile = await this.#ProfileModel.findByPk(userDTO.profileId);
     const patient = await profile.getPatient();
     const doctor = await profile.getDoctor();
@@ -25,7 +25,7 @@ class UserService {
       let updateProfile = {
         ...(birthDate && { birthDate }),
         ...(firstName && { firstName }),
-        ...(lastname && { lastname }),
+        ...(lastName && { lastName }),
         ...(isActive && { isActive }),
       };
       if (Object.keys(updateProfile).length > 0)
