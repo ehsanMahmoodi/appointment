@@ -44,7 +44,7 @@
  *       firstName:
  *        type: string
  *        example: ehsan
- *       lastname:
+ *       lastName:
  *        type: string
  *        example: mahmoodi
  *       nationalCode:
@@ -62,7 +62,7 @@
  *       firstName:
  *        type: string
  *        example: ehsan
- *       lastname:
+ *       lastName:
  *        type: string
  *        example: mahmoodi
  *       nationalCode:
